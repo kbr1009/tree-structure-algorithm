@@ -3,7 +3,7 @@ using module ".\Lib\TreeNodeBase.psm1"
 class TreeData : TreeNodeBase {
     [string]$Name
 
-    OU([string]$name) {
+    TreeData([string]$name) {
         $this.Name = $name
     }
 
