@@ -46,21 +46,25 @@ class TreeData : TreeNodeBase {
 }
 
 # ノードの作成
-$root = [TreeData]::new("Root")
-$child1 = [TreeData]::new("Child1")
-$child2 = [TreeData]::new("Child2")
-$grandchild1 = [TreeData]::new("Grandchild1")
+$root = [TreeData]::new("root")
+$c1 = [TreeData]::new("C-1")
+$c2 = [TreeData]::new("C-2")
+$c11 = [TreeData]::new("C-1-1")
+$c12 = [TreeData]::new("C-1-2")
+$c21 = [TreeData]::new("C-2-1")
 
 # ツリー構造の組み立て
-$root.AddChild($child1)
-$root.AddChild($child2)
-$child1.AddChild($grandchild1)
+$root.AddChild($c1)
+$root.AddChild($c2)
+$c1.AddChild($c11)
+$c1.AddChild($c12)
+$c2.AddChild($c21)
 
 # ツリーの表示
 Write-Host $root.ToStringTree()
 
 # ノードの検索
-$searchResult = $root.FindNode("Grandchild1")
+$searchResult = $root.FindNode($c12.Name)
 if ($null -ne $searchResult) {
     Write-Host "Found: $($searchResult.Name)"
 } else {
