@@ -4,17 +4,17 @@ class TreeNodeBase {
     [TreeNodeBase]$Parent
 
     # 子要素　コレクション
-    [Collections.Generic.List[TreeNodeBase]]$Children
+    [List[TreeNodeBase]]$Children
 
     # コンストラクタ
     TreeNodeBase() {
-        $this.Children = [Collections.Generic.List[TreeNodeBase]]::new()
+        $this.Children = [List[TreeNodeBase]]::new()
     }
 
     # 要素を追加する
     [void] AddChild([TreeNodeBase]$child) {
         if ($null -eq $child) {
-            throw [System.ArgumentNullException]::new("Failed: 引数にnullが挿入されている。")
+            throw [ArgumentNullException]::new("Failed: 引数にnullが挿入されている。")
         }
         $this.Children.Add($child)
         $child.Parent = $this
@@ -26,16 +26,32 @@ class TreeNodeBase {
     }
     [void] DisplayTree([int] $depth) {
         $indent = ' ' * ($depth * 2)
-        Write-Host ("$indent- " + $this.ToString())
+        Write-Host ("$indent- " + $this.ToStringVal())
 
         foreach ($child in $this.Children) {
             $child.DisplayTree($depth + 1)
         }
     }
 
+    # Tree構造を文字列で返す
+    [string] ToStringTree() {
+        return $this.ToStringTree(0)
+    }
+    [string] ToStringTree([int]$depth = 0) {
+        $sb = New-Object Text.StringBuilder
+        $indent = ' ' * ($depth * 2)
+        $sb.AppendLine("${indent}- $this")
+
+        foreach ($child in $this.Children) {
+            $sb.Append($child.ToStringTree($depth + 1))
+        }
+
+        return $sb.ToString()
+    }
+
     # 抽象メソッド Tree構造から要素を検索して返す
     [TreeNodeBase] FindNode([string]$name) { return $null }
 
     # 抽象メソッド オブジェクトのデータを文字列で返す
-    [string] ToString() { return $null }
+    [string] ToStringVal() { return $null }
 }

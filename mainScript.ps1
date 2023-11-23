@@ -20,7 +20,27 @@ class TreeData : TreeNodeBase {
         return $null
     }
 
-    [string] ToString() {
+    [string] ToStringTree() {
+        return $this.ToStringTree(0)
+    }
+    [string] ToStringTree([int]$depth) {
+        $sb = New-Object System.Text.StringBuilder
+        $indent = ' ' * ($depth * 2)
+        $sb.AppendLine("${indent}- $($this.Name)")
+
+        foreach ($child in $this.Children) {
+            $sb.Append($child.ToStringTree($depth + 1))
+        }
+
+        return $sb.ToString()
+    }
+
+    # Tree構造をコンソール上に表示させる
+    [void] DisplayTree() {
+        Write-Host $this.ToStringTree()
+    }
+
+    [string] ToStringVal() {
         return $this.Name
     }
 }
@@ -37,7 +57,7 @@ $root.AddChild($child2)
 $child1.AddChild($grandchild1)
 
 # ツリーの表示
-$root.DisplayTree()
+Write-Host $root.ToStringTree()
 
 # ノードの検索
 $searchResult = $root.FindNode("Grandchild1")
